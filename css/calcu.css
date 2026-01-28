@@ -63,7 +63,3 @@ button:hover{
     bottom: 1px;
     transition: 2s ease-in-out;
 }
-
-.zbtn{
-    grid-column: span 2;
-}
