@@ -25,6 +25,7 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 1rem;
+    min-width: 300px;
 }
 
 /* Most modern smartphones are between 360px and 430px wide */
@@ -97,6 +98,4 @@ button:hover{
     bottom: 1px;
     transition: 0.2s ease-in-out;
 }
-
-@media (min-width: 768px){}
-@media (min-width: 1024px){}
+@media (min-width: 1024px){ .buttonsContainer { gap: 1.1rem; } }
