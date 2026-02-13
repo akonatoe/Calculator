@@ -3,16 +3,38 @@ const equal = document.getElementById("equalBtn");
 
 const calcuBtn = document.querySelectorAll(".calcu-btn");
 
+const clearSc = document.getElementById("clearDisplayBtn");
+const deleteBtn = document.getElementById("deleteBtn")
+
 // let operatorList = [];
 
-const symbols = ['+', '-', '*', '/', '.']; //used as condition only
-const operators = ['+', '-', '*', '/']; //used for checking operators only
+const symbols = ['+', '-', '*', '/', '.', '^']; //used as condition only
+const operators = ['+', '-', '*', '/', '^']; //used for checking operators only
 
+let equalLogic = 0;
+
+
+/* --- LOGIC FOR CLICKED NUMBERSAND OPERATORS AND DISPLAY --- */
 calcuBtn.forEach(btn => {
     btn.addEventListener("click", function() {
-        const btnValue = btn.innerText;
-        let position = display.innerText.length;
-        
+        let btnValue = btn.innerText;
+
+        if (equalLogic == 1){
+            if (symbols.includes(btnValue)){
+                display.innerText += btnValue;
+                
+            }
+            else{
+                display.innerText = btnValue;
+            }
+            equalLogic = 0;
+            return;
+        }
+
+        //if ^
+        if (btnValue == "^ Exp"){
+            btnValue = "^"
+        }
 
         if (display.innerText == '0'){
             if (symbols.includes(btnValue)){
@@ -49,15 +71,41 @@ calcuBtn.forEach(btn => {
  
 });//END OF FOREACH LOOP
 
+
+
+
+/* --- LOGIC FOR EQUAL BUTTON --- */
 equal.addEventListener("click", function(){
+
+    if (!display.innerText) return; //stops anything else if display is empty
 
     let answer = 0;
 
-    const dispSplit = display.innerText.split(/([+\-*/])/);
+    let dispSplit = display.innerText.split(/([+\-*^/])/);
     //ex. '2', '+', '100', '*', '21', '-', '598', '/', '8'
+
+
+    //if last item in the display is an operator, remove it
+    if(symbols.includes(dispSplit.at(-1))){
+        dispSplit = dispSplit.slice(0, -1);
+    }
 
     console.log(dispSplit)
     
+    /* EMDAS RULE */
+    //for Exponent
+     for(let i = 0; i < dispSplit.length; i++){
+        if(dispSplit[i] == '^'){
+            const exp1 = Number(dispSplit[i-1]);
+            const exp2 = Number(dispSplit[i+1]);
+
+            answer = exp1 ** exp2;
+
+            dispSplit.splice(i - 1, 3, answer);
+            i--;
+        }
+     }
+
     //for MD
     for(let i = 0; i < dispSplit.length; i++){
 
@@ -98,7 +146,7 @@ equal.addEventListener("click", function(){
 
             answer = plusMin1 - plusMin2;
 
-             dispSplit.splice(i - 1, 3, answer);
+            dispSplit.splice(i - 1, 3, answer);
             i--;
 
         }
@@ -107,6 +155,36 @@ equal.addEventListener("click", function(){
     
     console.log(`Result: ${dispSplit}`);
     display.innerText = dispSplit;
+    equalLogic = 1;
+})//END OF EQUAL EVENT LISTENER
+
+clearSc.addEventListener("click", function(){
+    display.innerText = 0;
+})
+
+deleteBtn.addEventListener("click", function(){
+    if(display.innerText == '0') return
+    else {display.innerText = display.innerText.slice(0, -1);}
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -140,7 +218,5 @@ equal.addEventListener("click", function(){
     //         }//end of swich case
     //     }
     // } REDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO (TOO MANUAL. I'LL USE SPLIT() AND MAKE IT AS SIMPLE AS POSSIBLE)
-
-})//end of equal click addeventlistener
 
 

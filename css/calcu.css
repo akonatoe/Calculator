@@ -21,11 +21,18 @@ html {
 
 body {
     display: flex;
-    justify-content: center;
+    justify-content:center;
     align-items: center;
     min-height: 100vh;
     padding: 1rem;
     min-width: 300px;
+    flex-direction: row;
+}
+
+.arrow {
+    display: none;
+    width: 120px; 
+    text-align: center;
 }
 
 /* Most modern smartphones are between 360px and 430px wide */
@@ -84,7 +91,7 @@ body {
     border-radius: 8px;
     border: none;
 
-    box-shadow: 0px 0px 1px 1px black;
+    box-shadow: 0px 0px 1px 1px white;
     
 }
 
@@ -98,4 +105,20 @@ button:hover{
     bottom: 1px;
     transition: 0.2s ease-in-out;
 }
-@media (min-width: 1024px){ .buttonsContainer { gap: 1.1rem; } }
+
+@media (min-width: 768px) {
+
+    body {gap: 4rem;}
+
+    .arrow {
+        display: block;
+        font-size: 8rem;
+    }
+}
+
+@media (min-width: 1024px){ 
+    .buttonsContainer { gap: 1.1rem; }
+    .arrow {display: none;}
+
+    /* make the buttons and the texts bigger for this media */
+}
