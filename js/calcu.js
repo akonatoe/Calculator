@@ -11,7 +11,7 @@ const deleteBtn = document.getElementById("deleteBtn")
 const symbols = ['+', '-', '*', '/', '.', '^']; //used as condition only
 const operators = ['+', '-', '*', '/', '^']; //used for checking operators only
 
-let equalLogic = 0;
+let justCalculated = false;
 
 
 /* --- LOGIC FOR CLICKED NUMBERSAND OPERATORS AND DISPLAY --- */
@@ -19,15 +19,19 @@ calcuBtn.forEach(btn => {
     btn.addEventListener("click", function() {
         let btnValue = btn.innerText;
 
-        if (equalLogic == 1){
-            if (symbols.includes(btnValue)){
+        //LOGIC TO REPLACE THE NUMBERS MADE BY THE EQUAL SIGN IF NUMBERS IS ENTERED BUT IF OPERATORS IS ENTERED, IT CONTINUES THE NUMBER
+        if (justCalculated){
+            if (operators.includes(btnValue)){
                 display.innerText += btnValue;
                 
+            }
+            else if(btnValue == '.'){
+                display.innerText = '0.'
             }
             else{
                 display.innerText = btnValue;
             }
-            equalLogic = 0;
+            justCalculated = false;
             return;
         }
 
@@ -36,6 +40,7 @@ calcuBtn.forEach(btn => {
             btnValue = "^"
         }
 
+        //if currently only 0 is in display
         if (display.innerText == '0'){
             if (symbols.includes(btnValue)){
                 display.innerText += btnValue;
@@ -154,8 +159,8 @@ equal.addEventListener("click", function(){
 
     
     console.log(`Result: ${dispSplit}`);
-    display.innerText = dispSplit;
-    equalLogic = 1;
+    display.innerText = dispSplit[0];
+    justCalculated = true;
 })//END OF EQUAL EVENT LISTENER
 
 clearSc.addEventListener("click", function(){
