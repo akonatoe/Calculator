@@ -6,6 +6,10 @@ const calcuBtn = document.querySelectorAll(".calcu-btn");
 const clearSc = document.getElementById("clearDisplayBtn");
 const deleteBtn = document.getElementById("deleteBtn")
 
+const arrows = document.querySelectorAll(".arrow");
+const body = document.body;
+const rArrow = document.getElementById("right-arrow");
+const lArrow = document.getElementById("left-arrow");
 // let operatorList = [];
 
 const symbols = ['+', '-', '*', '/', '.', '^']; //used as condition only
@@ -18,6 +22,12 @@ let justCalculated = false;
 calcuBtn.forEach(btn => {
     btn.addEventListener("click", function() {
         let btnValue = btn.innerText;
+
+
+        //if ^
+        if (btnValue == "^ Exp"){
+            btnValue = "^"
+        }
 
         //LOGIC TO REPLACE THE NUMBERS MADE BY THE EQUAL SIGN IF NUMBERS IS ENTERED BUT IF OPERATORS IS ENTERED, IT CONTINUES THE NUMBER
         if (justCalculated){
@@ -35,10 +45,7 @@ calcuBtn.forEach(btn => {
             return;
         }
 
-        //if ^
-        if (btnValue == "^ Exp"){
-            btnValue = "^"
-        }
+        
 
         //if currently only 0 is in display
         if (display.innerText == '0'){
@@ -172,6 +179,21 @@ deleteBtn.addEventListener("click", function(){
     else {display.innerText = display.innerText.slice(0, -1);}
 })
 
+
+arrows.forEach(arrs => {
+    arrs.addEventListener("click", function(){
+        let arrsValue = arrs.innerText;
+
+        //left arrow
+        if(arrsValue === '🡄'){
+            body.classList.add("moveLeft");
+            lArrow.classList.add("hidden");
+        }
+        else if(arrsValue === "🡆"){
+            
+        }
+    })
+})
 
 
 

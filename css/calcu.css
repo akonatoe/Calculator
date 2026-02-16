@@ -29,11 +29,9 @@ body {
     flex-direction: row;
 }
 
-.arrow {
-    display: none;
-    width: 120px; 
-    text-align: center;
-}
+
+
+
 
 /* Most modern smartphones are between 360px and 430px wide */
 .calculator {
@@ -122,3 +120,25 @@ button:hover{
 
     /* make the buttons and the texts bigger for this media */
 }
+
+/* arrow styles for functions */
+.arrow {
+    width: 120px; 
+    text-align: center;
+}
+.arrow:hover{
+    cursor: pointer;
+}
+
+.moveLeft{
+    justify-content: start;
+    padding-left: 30px;
+}
+.moveRight{
+    justify-content: end;
+}
+.hidden{
+    display: none;
+}
+
+/* end of arrow styles */
