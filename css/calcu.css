@@ -30,7 +30,11 @@ body {
 }
 
 
-
+.arrow {
+    display: none;
+    width: 120px; 
+    text-align: center;
+}
 
 
 /* Most modern smartphones are between 360px and 430px wide */
@@ -59,7 +63,7 @@ body {
     
     display: flex;
     align-items: end;
-    justify-content: end;
+    justify-content: flex-end;
 
     background-color: var(--display-bg);
     color: white;
@@ -111,32 +115,33 @@ button:hover{
     .arrow {
         display: block;
         font-size: 8rem;
+    }.moveLeft{
+        justify-content: flex-start;
+        padding-left: 30px;
+    }
+    .moveRight{
+        justify-content: flex-end;
     }
 }
 
-@media (min-width: 1024px){ 
+@media (min-width: 1024px){     
     .buttonsContainer { gap: 1.1rem; }
     .arrow {display: none;}
+    
 
     /* make the buttons and the texts bigger for this media */
 }
 
 /* arrow styles for functions */
-.arrow {
-    width: 120px; 
-    text-align: center;
-}
+
 .arrow:hover{
     cursor: pointer;
+    transform: scale(1.1);
+}
+.moveCenter{
+    justify-content: center;
 }
 
-.moveLeft{
-    justify-content: start;
-    padding-left: 30px;
-}
-.moveRight{
-    justify-content: end;
-}
 .hidden{
     display: none;
 }
