@@ -15,6 +15,7 @@ const lArrow = document.getElementById("left-arrow");
 const operators = ["+", "-", "*", "/", "^"]; //used for checking operators only
 const symbols = [...operators, "."]; //used as condition only
 
+let dispStore = ["0"];
 let justCalculated = false;
 
 /* --- LOGIC FOR CLICKED NUMBERS AND OPERATORS AND DISPLAY --- */
@@ -22,25 +23,27 @@ calcuBtn.forEach((btn) => {
   btn.addEventListener("click", function () {
     let btnValue = btn.innerText;
 
+    ///magulong part
+    // if (btnValue === "+/-"){
 
+    //   let parts = display.innerText.split(/([+\-*/^])/);
+    //   //nasa string splitting ang problemaaa if di nya madistinguish ang negative at minus nang maayos, di maayos ang splitting
 
-    if (btnValue === "+/-"){
+    //   let lastIndex = parts.length - 1;
+    //   let lastPart = parts[lastIndex];
 
-      let parts = display.innerText.split(/([+*/^]|-(?=\d))/);
-      let lastIndex = parts.length - 1;
-      let lastPart = parts[lastIndex];
+    //   if (!lastPart || operators.includes(lastPart)) return;
 
-      if (!lastPart || operators.includes(lastPart)) return;
+    //   if (parts[lastIndex].startsWith("-")){
+    //     parts[lastIndex] = parts[lastIndex].slice(1);
+    //   } else {
+    //     parts[lastIndex] = "-" + parts[lastIndex];
+    //   }
+    //   console.log(parts, lastIndex, parts[lastIndex]);
 
-      if (lastPart.startsWith("-")){
-        parts[lastIndex] = lastPart.slice(1);
-      } else {
-        parts[lastIndex] = "-" + lastPart;
-      }
-
-      display.innerText = parts.join("");
-      return;
-    }
+    //   display.innerText = parts.join("");
+    //   return;
+    // }
 
     //if ^
     if (btnValue == "^ Exp") {
@@ -103,21 +106,8 @@ equal.addEventListener("click", function () {
   let answer = 0;
 
   let dispSplit = display.innerText.split(/([+\-*^/])/);
-  //ex. '2', '+', '100', '*', '21', '-', '598', '/', '8'
-
-  // Remove empty strings created by the split (essential for handling negatives)
-  dispSplit = dispSplit.filter(item => item !== "");
-
-  /* --- NEGATIVE SIGN FIX --- */
-  // This loop looks for minus signs that are actually negative numbers (unary minus)
-  for (let i = 0; i < dispSplit.length; i++) {
-    // If '-' is at the very start OR follows another operator, it belongs to the next number
-    if (dispSplit[i] === "-" && (i === 0 || operators.includes(dispSplit[i - 1]))) {
-      dispSplit[i + 1] = "-" + dispSplit[i + 1]; // Attach the minus to the number
-      dispSplit.splice(i, 1); // Remove the standalone "-" from the array
-      i--; // Adjust index to account for the removed item
-    }
-  }
+  // isa pa tong problema na to. di masplit maayos so nagiging 1+" "-1 imbes na 1 + (-1)
+  //ex. ['1', '+', '', '-', '1', '+', '', '-', '2', '+', '', '-', '3', '+', '-4']
 
   //if last item in the display is an operator, remove it
   if (symbols.includes(dispSplit.at(-1))) {
