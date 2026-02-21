@@ -18,76 +18,91 @@ const symbols = [...operators, "."]; //used as condition only
 let dispStore = ["0"];
 let justCalculated = false;
 
+function updateUI(){
+  display.innerText = dispStore.length > 0 ? dispStore.join("") : "0";
+}
+
 /* --- LOGIC FOR CLICKED NUMBERS AND OPERATORS AND DISPLAY --- */
 calcuBtn.forEach((btn) => {
   btn.addEventListener("click", function () {
     let btnValue = btn.innerText;
 
+    let lastIndex = dispStore.length - 1;
+    let lastItem = dispStore[lastIndex];
+
     ///magulong part
-    // if (btnValue === "+/-"){
+    if (btnValue === "+/-") {
+        if (lastItem === "0") return;
 
-    //   let parts = display.innerText.split(/([+\-*/^])/);
-    //   //nasa string splitting ang problemaaa if di nya madistinguish ang negative at minus nang maayos, di maayos ang splitting
+        else if (operators.includes(lastItem)) return;
 
-    //   let lastIndex = parts.length - 1;
-    //   let lastPart = parts[lastIndex];
+        else if (lastItem.startsWith("-")){
+          dispStore[lastIndex] = lastItem.slice(1);
+        }
 
-    //   if (!lastPart || operators.includes(lastPart)) return;
-
-    //   if (parts[lastIndex].startsWith("-")){
-    //     parts[lastIndex] = parts[lastIndex].slice(1);
-    //   } else {
-    //     parts[lastIndex] = "-" + parts[lastIndex];
-    //   }
-    //   console.log(parts, lastIndex, parts[lastIndex]);
-
-    //   display.innerText = parts.join("");
-    //   return;
-    // }
+        else {
+          dispStore[lastIndex] = "-" + lastItem;
+        }
+        
+        updateUI();
+        return;
+    }
 
     //if ^
     if (btnValue == "^ Exp") {
       btnValue = "^";
     }
 
+    if (btnValue === "." && !justCalculated) {
+      if (lastItem.includes(".")) return;
+
+      if (operators.includes(lastItem) || !lastItem) {
+        dispStore.push("0.");
+        updateUI();
+        return;
+      }
+    }
+
     //REPLACE THE NUMBERS MADE BY THE EQUAL SIGN IF NUMBERS IS ENTERED BUT IF OPERATORS IS ENTERED, IT CONTINUES THE NUMBER
     if (justCalculated) {
       if (operators.includes(btnValue)) {
-        display.innerText += btnValue;
+        dispStore.push(btnValue);
       } else if (btnValue == ".") {
-        display.innerText = "0.";
+        dispStore = ["0."];
       } else {
-        display.innerText = btnValue;
+        dispStore = [btnValue];
       }
       justCalculated = false;
+      updateUI();
       return;
     }
 
     //if currently ONLY '0' is in display
     if (display.innerText == "0") {
-      if (symbols.includes(btnValue) && btnValue !== "+/-") {
-        display.innerText += btnValue;
+      if (symbols.includes(btnValue)) {
+        dispStore.push(btnValue);
       } else {
-        display.innerText = btnValue;
+        dispStore = [btnValue];
       }
+      updateUI();
       return;
     }
 
     //if last index in display is SYMBOL / OPERATOR, then change it to the new operator
-    if (symbols.includes(display.innerText.slice(-1))) {
-      if (btnValue === "+/-"){
-        return;
-      } else if (symbols.includes(btnValue)) {
-        display.innerText = display.innerText.slice(0, -1);
-        display.innerText += btnValue;
-      } else if (!symbols.includes(btnValue)) {
-        display.innerText += btnValue;
-      }
+    if (symbols.includes(btnValue)) {
+        if (symbols.includes(lastItem)) {
+            dispStore[dispStore.length - 1] = btnValue; 
+        } else {
+            dispStore.push(btnValue);
+        }
+    } else {
+        if (symbols.includes(lastItem)) {
+            dispStore.push(btnValue);
+        } else {
+            dispStore[dispStore.length - 1] += btnValue;
+        }
     }
-    //if last character in display is a number
-    else if (!symbols.includes(display.innerText.slice(-1)) && btnValue !== "+/-") {
-      display.innerText += btnValue;
-    }
+    updateUI();
 
     //here should be the turn the whole display to splitted version (array) so the +/- can modify the last number entered
 
@@ -100,92 +115,104 @@ calcuBtn.forEach((btn) => {
 
 /* --- LOGIC FOR EQUAL BUTTON --- */
 equal.addEventListener("click", function () {
-  
-  if (!display.innerText) return; //stops anything else if display is empty
-
+  let lastIndex = dispStore.length - 1; 
+  let lastItem = dispStore[lastIndex];
   let answer = 0;
 
-  let dispSplit = display.innerText.split(/([+\-*^/])/);
-  // isa pa tong problema na to. di masplit maayos so nagiging 1+" "-1 imbes na 1 + (-1)
-  //ex. ['1', '+', '', '-', '1', '+', '', '-', '2', '+', '', '-', '3', '+', '-4']
+  if (dispStore.length === 0 || (dispStore.length === 1 && dispStore[0] === "0")) return; //stops anything else if display is empty
 
   //if last item in the display is an operator, remove it
-  if (symbols.includes(dispSplit.at(-1))) {
-    dispSplit = dispSplit.slice(0, -1);
+  if (symbols.includes(lastItem)) {
+    dispStore.pop();
   }
 
-  console.log(dispSplit);
+  console.log(dispStore)
 
   /* EMDAS RULE */
   //for Exponent
-  for (let i = 0; i < dispSplit.length; i++) {
-    if (dispSplit[i] == "^") {
-      const exp1 = Number(dispSplit[i - 1]);
-      const exp2 = Number(dispSplit[i + 1]);
+  for (let i = 0; i < dispStore.length; i++) {
+    if (dispStore[i] == "^") {
+      const exp1 = Number(dispStore[i - 1]);
+      const exp2 = Number(dispStore[i + 1]);
 
       answer = exp1 ** exp2;
 
-      dispSplit.splice(i - 1, 3, answer);
+      dispStore.splice(i - 1, 3, String(answer));
       i--;
     }
   }
 
   //for MD
-  for (let i = 0; i < dispSplit.length; i++) {
-    if (dispSplit[i] == "*") {
-      const mathDiv1 = Number(dispSplit[i - 1]);
-      const mathDiv2 = Number(dispSplit[i + 1]);
+  for (let i = 0; i < dispStore.length; i++) {
+    if (dispStore[i] == "*") {
+      const mathDiv1 = Number(dispStore[i - 1]);
+      const mathDiv2 = Number(dispStore[i + 1]);
 
       answer = mathDiv1 * mathDiv2;
 
-      dispSplit.splice(i - 1, 3, answer);
+      dispStore.splice(i - 1, 3, String(answer));
       i--;
-    } else if (dispSplit[i] == "/") {
-      const mathDiv1 = Number(dispSplit[i - 1]);
-      const mathDiv2 = Number(dispSplit[i + 1]);
+    } else if (dispStore[i] == "/") {
+      const mathDiv1 = Number(dispStore[i - 1]);
+      const mathDiv2 = Number(dispStore[i + 1]);
 
       answer = mathDiv1 / mathDiv2;
 
-      dispSplit.splice(i - 1, 3, answer);
+      dispStore.splice(i - 1, 3, String(answer));
       i--;
     }
   }
 
   //for AS
-  for (let i = 0; i < dispSplit.length; i++) {
-    if (dispSplit[i] == "+") {
-      const plusMin1 = Number(dispSplit[i - 1]);
-      const plusMin2 = Number(dispSplit[i + 1]);
+  for (let i = 0; i < dispStore.length; i++) {
+    if (dispStore[i] == "+") {
+      const plusMin1 = Number(dispStore[i - 1]);
+      const plusMin2 = Number(dispStore[i + 1]);
 
       answer = plusMin1 + plusMin2;
 
-      dispSplit.splice(i - 1, 3, answer);
+      dispStore.splice(i - 1, 3, String(answer));
       i--;
-    } else if (dispSplit[i] == "-") {
-      const plusMin1 = Number(dispSplit[i - 1]);
-      const plusMin2 = Number(dispSplit[i + 1]);
+    } else if (dispStore[i] == "-") {
+      const plusMin1 = Number(dispStore[i - 1]);
+      const plusMin2 = Number(dispStore[i + 1]);
 
       answer = plusMin1 - plusMin2;
 
-      dispSplit.splice(i - 1, 3, answer);
+      dispStore.splice(i - 1, 3, String(answer));
       i--;
     }
   }
 
-  console.log(`Result: ${dispSplit}`);
-  display.innerText = dispSplit[0];
+  console.log(`Result: ${dispStore}`);
+  updateUI();
   justCalculated = true;
 }); //END OF EQUAL EVENT LISTENER
 
+
+
 clearSc.addEventListener("click", function () {
-  display.innerText = 0;
+  dispStore = ["0"];
+  updateUI();
 });
 
 deleteBtn.addEventListener("click", function () {
-  if (display.innerText == "0") return;
-  else {
-    display.innerText = display.innerText.slice(0, -1);
+  let lastIndex = dispStore.length - 1;
+  let lastItem = dispStore[lastIndex];
+
+  if (dispStore.length === 0 || (dispStore.length === 1 && dispStore[0] === "0")) return;
+
+  dispStore[lastIndex] = lastItem.slice(0, -1);
+
+  if (dispStore[lastIndex] === "") {
+    dispStore.pop();
   }
+
+  if (dispStore.length === 0) {
+    dispStore = ["0"];
+  }
+
+  updateUI();
 });
 
 arrows.forEach((arrs) => {
