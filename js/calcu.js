@@ -65,7 +65,16 @@ calcuBtn.forEach((btn) => {
 
     //REPLACE THE NUMBERS MADE BY THE EQUAL SIGN IF NUMBERS IS ENTERED BUT IF OPERATORS IS ENTERED, IT CONTINUES THE NUMBER
     if (justCalculated) {
-      if (operators.includes(btnValue)) {
+      if (btnValue === "+/-") {
+        if (lastItem.startsWith("-")){
+          dispStore[lastIndex] = lastItem.slice(1);
+        }
+        else {
+          dispStore[lastIndex] = "-" + lastItem;
+        }
+        updateUI();
+        return;
+      } else if (operators.includes(btnValue)) {
         dispStore.push(btnValue);
       } else if (btnValue == ".") {
         dispStore = ["0."];
@@ -105,7 +114,6 @@ calcuBtn.forEach((btn) => {
     updateUI();
 
     //here should be the turn the whole display to splitted version (array) so the +/- can modify the last number entered
-
 
   });
 }); //END OF FOREACH LOOP
