@@ -228,17 +228,51 @@ arrows.forEach((arrs) => {
     let arrsValue = arrs.innerText;
 
     // Always reset first
-    body.classList.remove("moveLeft", "moveRight");
+    // body.classList.remove("moveLeft", "moveRight");
 
-    if (arrsValue === "🡄") {
-      body.classList.add("moveLeft");
-      lArrow.classList.add("hidden");
-      rArrow.classList.remove("hidden");
-    } else if (arrsValue === "🡆") {
-      body.classList.add("moveRight");
-      rArrow.classList.add("hidden");
-      lArrow.classList.remove("hidden");
+    // if (arrsValue === "🡄") {
+    //   body.classList.add("moveLeft");
+    //   lArrow.classList.add("hidden");
+    //   rArrow.classList.remove("hidden");
+    // } else if (arrsValue === "🡆") {
+    //   body.classList.add("moveRight");
+    //   rArrow.classList.add("hidden");
+    //   lArrow.classList.remove("hidden");
+    // }
+
+    if (body.classList.contains("moveLeft")){
+      if (arrsValue === "🡄"){
+        return;
+      }
+      else if (arrsValue === "🡆") {
+        body.classList.remove("moveLeft");
+        lArrow.classList.remove("hidden");
+      }
     }
+
+    else if (body.classList.contains("moveRight")){
+      if (arrsValue === "🡄"){
+        body.classList.remove("moveRight");
+        rArrow.classList.remove("hidden");
+      }
+      else if (arrsValue === "🡆") {
+        return;
+      }
+    }
+
+    else {
+      if (arrsValue === "🡄"){
+        body.classList.add("moveLeft");
+        lArrow.classList.add("hidden");
+      }
+      else if (arrsValue === "🡆") {
+        body.classList.add("moveRight");
+        rArrow.classList.add("hidden");
+      }
+    }
+
+
+
   });
 });
 
