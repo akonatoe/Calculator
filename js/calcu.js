@@ -30,7 +30,7 @@ calcuBtn.forEach((btn) => {
     let lastIndex = dispStore.length - 1;
     let lastItem = dispStore[lastIndex];
 
-    ///magulong part
+    ///magulong part noon
     if (btnValue === "+/-") {
         if (lastItem === "0") return;
 
@@ -225,20 +225,7 @@ deleteBtn.addEventListener("click", function () {
 
 arrows.forEach((arrs) => {
   arrs.addEventListener("click", function () {
-    let arrsValue = arrs.innerText;
-
-    // Always reset first
-    // body.classList.remove("moveLeft", "moveRight");
-
-    // if (arrsValue === "🡄") {
-    //   body.classList.add("moveLeft");
-    //   lArrow.classList.add("hidden");
-    //   rArrow.classList.remove("hidden");
-    // } else if (arrsValue === "🡆") {
-    //   body.classList.add("moveRight");
-    //   rArrow.classList.add("hidden");
-    //   lArrow.classList.remove("hidden");
-    // }
+    let arrsValue = arrs.innerText; 
 
     if (body.classList.contains("moveLeft")){
       if (arrsValue === "🡄"){
